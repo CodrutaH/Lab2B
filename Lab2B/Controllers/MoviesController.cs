@@ -39,8 +39,6 @@ namespace Lab2B.Controllers
                 result = result.Where(m => m.Date <= to);
             }
 
-          
-
             return result;
 
         }
