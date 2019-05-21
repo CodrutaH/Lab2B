@@ -13,6 +13,6 @@ namespace Lab2B.Models
         }
 
         public DbSet<Movie> Movies { get; set; }
-
+        public DbSet<Comment> Comments { get; set; }
     }
 }

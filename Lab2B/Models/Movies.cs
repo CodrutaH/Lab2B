@@ -29,6 +29,6 @@ namespace Lab2B.Models
         [Range(1, 10)]
         public int Rating { get; set; }
         public string Watched { get; set; }
-        
+        public List<Comment> Comments { get; set; }
     }
 }
