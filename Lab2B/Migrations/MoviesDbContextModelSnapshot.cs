@@ -52,7 +52,7 @@ namespace Lab2B.Migrations
 
                     b.Property<int>("Duration");
 
-                    b.Property<string>("Genre");
+                    b.Property<int>("Genre");
 
                     b.Property<int>("Rating");
 

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lab2B.Migrations
 {
     [DbContext(typeof(MoviesDbContext))]
-    [Migration("20190521164510_AddGenre")]
-    partial class AddGenre
+    [Migration("20190522163658_CreateMovie")]
+    partial class CreateMovie
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,25 @@ namespace Lab2B.Migrations
                 .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Lab2B.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Important");
+
+                    b.Property<int?>("MovieId");
+
+                    b.Property<string>("Text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
+
+                    b.ToTable("Comments");
+                });
 
             modelBuilder.Entity("Lab2B.Models.Movie", b =>
                 {
@@ -35,7 +54,7 @@ namespace Lab2B.Migrations
 
                     b.Property<int>("Duration");
 
-                    b.Property<string>("Genre");
+                    b.Property<int>("Genre");
 
                     b.Property<int>("Rating");
 
@@ -48,6 +67,13 @@ namespace Lab2B.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Movies");
+                });
+
+            modelBuilder.Entity("Lab2B.Models.Comment", b =>
+                {
+                    b.HasOne("Lab2B.Models.Movie")
+                        .WithMany("Comments")
+                        .HasForeignKey("MovieId");
                 });
 #pragma warning restore 612, 618
         }

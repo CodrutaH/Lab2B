@@ -21,7 +21,7 @@ namespace Lab2B.Models
         public string Title { get; set; }
         public string Description { get; set; }
         [EnumDataType(typeof(Genre))]
-        public string Genre { get; set; }
+        public Genre Genre { get; set; }
         public int Duration { get; set; }
         public int Year { get; set; }
         public string Director { get; set; }

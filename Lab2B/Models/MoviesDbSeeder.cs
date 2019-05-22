@@ -22,7 +22,7 @@ namespace Lab2B.Models
                   {
                       Title = "telefon",
                       Description = "White, Yellow",
-                     
+                     Genre = Genre.action,
                       Director = "Ana",
                       Duration = 100,
                       Year = 1999,
@@ -34,7 +34,7 @@ namespace Lab2B.Models
                 {
                     Title = "Titanic",
                     Description = "a big boat",
-                    
+                     Genre = Genre.comedy,
                     Director = "Ana",
                     Duration = 100,
                     Year = 2001,
@@ -46,7 +46,7 @@ namespace Lab2B.Models
                 {
                     Title = "Vals",
                     Description = "a big boat",
-                   
+                     Genre = Genre.comedy,
                     Director = "Ana",
                     Duration = 100,
                     Year = 2001,
