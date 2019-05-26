@@ -12,7 +12,7 @@ namespace Lab2B.Controllers
     [ApiController]
     public class CommentsController
     {
-        private ICommentService commentsService;
+        private readonly ICommentService commentsService;
         public CommentsController(ICommentService commentsService)
             {
                 this.commentsService = commentsService;

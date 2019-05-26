@@ -8,6 +8,9 @@ using Lab2B.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Lab2B.ViewModels;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Lab2B.Controllers
 {
@@ -26,13 +29,16 @@ namespace Lab2B.Controllers
         /// </summary>
         /// <param name="from">Optional, filter by minimum Date.</param>
         /// <param name="to">Optional, filter by maximum Date</param>
-        /// <param name="genre">A list of Movies objects.</param>
+        /// <param name="genre">Optional, filter by genre</param>
+        /// <param name="page"></param>
         /// <returns></returns>
         // GET: api/Flowers
         [HttpGet]
-        public IEnumerable<MovieGetModel> Get([FromQuery]DateTime? from, [FromQuery]DateTime? to)
+        public PaginatedList<MovieGetModel> Get([FromQuery]DateTime? from, [FromQuery]DateTime? to, [FromQuery]Genre? genre, [FromQuery]int page = 1)
         {
-            return this.movieService.GetAll(from, to);
+            // TODO: make pagination work with /api/flowers/page/<page number>
+            page = Math.Max(page, 1);
+            return movieService.GetAll(page,from,to,genre);
         }
 
 
@@ -40,7 +46,7 @@ namespace Lab2B.Controllers
         [HttpGet("{id}", Name = "Get")]
         public IActionResult Get(int id)
         {
-            var existing = this.movieService.GetById(id);
+            var existing = this.movieService.GetById(id); 
             if (existing == null)
             {
                 return NotFound();
@@ -70,10 +76,8 @@ namespace Lab2B.Controllers
         ///    "watched": "0",
         ///    "comments": [
         ///	   {    
-
         ///		"text": "Bad",
         ///		"important": false
-
         ///     }
         ///    ]
         ///   }
@@ -84,10 +88,11 @@ namespace Lab2B.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         // POST: api/Products
+        [Authorize]
         [HttpPost]
         public void Post([FromBody] MoviePostModel movie)
         {
-            this.movieService.Create(movie);
+            movieService.Create(movie);
         }
 
         // PUT: api/Flowers/5

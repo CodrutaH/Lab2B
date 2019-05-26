@@ -1,5 +1,6 @@
 ﻿using Lab2B.Models;
 using Lab2B.ViewModel;
+using Lab2B.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,10 @@ namespace Lab2B.Services
         /// </summary>
         /// <param name="from"></param>
         /// <param name="to"></param>
+        /// <param nema="page"></param>
+        /// <param name="genre"></param>
         /// <returns></returns>
-        IEnumerable<MovieGetModel> GetAll(DateTime? from = null, DateTime? to = null);
+        PaginatedList<MovieGetModel> GetAll(int page, DateTime? from = null, DateTime? to = null, Genre? genre = null);
         Movie GetById(int id);
         Movie Create(MoviePostModel movie);
         Movie Upsert(int id, Movie movie);
@@ -51,15 +54,16 @@ namespace Lab2B.Services
             return existing;
         }
 
-        public IEnumerable<MovieGetModel> GetAll(DateTime? from = null, DateTime? to = null)
+        public PaginatedList<MovieGetModel> GetAll(int page, DateTime? from = null, DateTime? to = null, Genre ? genre = null)
         {
             IQueryable<Movie> result = context
                 .Movies
-                .Include(f => f.Comments);
-            if (from == null && to == null)
-            {
-                return result.Select(f => MovieGetModel.FromMovie(f));
-            }
+                .OrderBy(m => m.Id)
+                .Include(m => m.Comments);
+            PaginatedList<MovieGetModel> paginatedResult = new PaginatedList<MovieGetModel>();
+            paginatedResult.CurrentPage = page;
+                   
+            
             if (from != null)
             {
                 result = result.Where(m => m.Date >= from);
@@ -68,7 +72,14 @@ namespace Lab2B.Services
             {
                 result = result.Where(m => m.Date <= to);
             }
-            return result.Select(m => MovieGetModel.FromMovie(m));
+            paginatedResult.NumberOfPages = (result.Count() - 1) / PaginatedList<MovieGetModel>.EntriesPerPage + 1;
+            result = result
+                .Skip((page - 1) * PaginatedList<MovieGetModel>.EntriesPerPage)
+                .Take(PaginatedList<MovieGetModel>.EntriesPerPage);
+            paginatedResult.Entries = result.Select(m => MovieGetModel.FromMovie(m)).ToList();
+
+
+            return paginatedResult;
         }
 
         public Movie GetById(int id)
