@@ -16,7 +16,7 @@ namespace Lab2B.Services
         /// </summary>
         /// <param name="from"></param>
         /// <param name="to"></param>
-        /// <param nema="page"></param>
+        /// <param name="page"></param>
         /// <param name="genre"></param>
         /// <returns></returns>
         PaginatedList<MovieGetModel> GetAll(int page, DateTime? from = null, DateTime? to = null, Genre? genre = null);
@@ -60,10 +60,12 @@ namespace Lab2B.Services
                 .Movies
                 .OrderBy(m => m.Id)
                 .Include(m => m.Comments);
-            PaginatedList<MovieGetModel> paginatedResult = new PaginatedList<MovieGetModel>();
-            paginatedResult.CurrentPage = page;
-                   
-            
+            PaginatedList<MovieGetModel> paginatedResult = new PaginatedList<MovieGetModel>
+            {
+                CurrentPage = page
+            };
+
+
             if (from != null)
             {
                 result = result.Where(m => m.Date >= from);
