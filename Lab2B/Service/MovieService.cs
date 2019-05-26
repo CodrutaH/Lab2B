@@ -43,7 +43,7 @@ namespace Lab2B.Services
 
         public Movie Delete(int id)
         {
-            var existing = context.Movies.FirstOrDefault(movie => movie.Id == id);
+            var existing = context.Movies.Include(m => m.Comments).FirstOrDefault(movie => movie.Id == id);
             if (existing == null)
             {
                 return null;
@@ -60,11 +60,8 @@ namespace Lab2B.Services
                 .Movies
                 .OrderBy(m => m.Id)
                 .Include(m => m.Comments);
-            PaginatedList<MovieGetModel> paginatedResult = new PaginatedList<MovieGetModel>
-            {
-                CurrentPage = page
-            };
-
+            PaginatedList<MovieGetModel> paginatedResult = new PaginatedList<MovieGetModel>();
+            paginatedResult.CurrentPage = page;
 
             if (from != null)
             {
@@ -79,8 +76,6 @@ namespace Lab2B.Services
                 .Skip((page - 1) * PaginatedList<MovieGetModel>.EntriesPerPage)
                 .Take(PaginatedList<MovieGetModel>.EntriesPerPage);
             paginatedResult.Entries = result.Select(m => MovieGetModel.FromMovie(m)).ToList();
-
-
             return paginatedResult;
         }
 
