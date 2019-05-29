@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Lab2B.Services;
 using Lab2B.Models;
-using Lab2B.ViewModel;
+using Lab2B.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Lab2B.ViewModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authorization;
+using Lab2B.Service;
 
 namespace Lab2B.Controllers
 {
@@ -20,25 +20,26 @@ namespace Lab2B.Controllers
     {
 
         private IMovieService movieService;
-        public MoviesController(IMovieService movieService)
+        private IUsersService userService;
+        public MoviesController(IMovieService movieService,IUsersService userService)
         {
             this.movieService = movieService;
+            this.userService = userService;
         }
         /// <summary>
         /// Gets all the movies
         /// </summary>
         /// <param name="from">Optional, filter by minimum Date.</param>
         /// <param name="to">Optional, filter by maximum Date</param>
-        /// <param name="genre">Optional, filter by genre</param>
-        /// <param name="page"></param>
+         /// <param name="page"></param>
         /// <returns></returns>
         // GET: api/Flowers
         [HttpGet]
-        public PaginatedList<MovieGetModel> Get([FromQuery]DateTime? from, [FromQuery]DateTime? to, [FromQuery]Genre? genre, [FromQuery]int page = 1)
+        public PaginatedList<MovieGetModel> Get([FromQuery]DateTime? from, [FromQuery]DateTime? to,[FromQuery]int page = 1)
         {
             // TODO: make pagination work with /api/flowers/page/<page number>
             page = Math.Max(page, 1);
-            return movieService.GetAll(page,from,to,genre);
+            return movieService.GetAll(page, from, to);
         }
 
 
@@ -46,7 +47,7 @@ namespace Lab2B.Controllers
         [HttpGet("{id}", Name = "Get")]
         public IActionResult Get(int id)
         {
-            var existing = this.movieService.GetById(id); 
+            var existing = movieService.GetById(id); 
             if (existing == null)
             {
                 return NotFound();
@@ -88,11 +89,12 @@ namespace Lab2B.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         // POST: api/Products
-        [Authorize]
+        [Authorize(Roles = "Admin,Regular")]
         [HttpPost]
         public void Post([FromBody] MoviePostModel movie)
         {
-            movieService.Create(movie);
+            User addedBy = userService.GetCurrentUser(HttpContext);
+            movieService.Create(movie,addedBy);
         }
 
         // PUT: api/Flowers/5

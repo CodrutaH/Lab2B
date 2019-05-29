@@ -30,5 +30,6 @@ namespace Lab2B.Models
         public int Rating { get; set; }
         public string Watched { get; set; }
         public List<Comment> Comments { get; set; }
+        public User Owner { get; set; }
     }
 }

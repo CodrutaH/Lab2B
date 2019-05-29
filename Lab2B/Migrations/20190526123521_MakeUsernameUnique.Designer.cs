@@ -4,14 +4,16 @@ using Lab2B.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Lab2B.Migrations
 {
     [DbContext(typeof(MoviesDbContext))]
-    partial class MoviesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190526123521_MakeUsernameUnique")]
+    partial class MakeUsernameUnique
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,15 +31,11 @@ namespace Lab2B.Migrations
 
                     b.Property<int?>("MovieId");
 
-                    b.Property<int?>("OwnerId");
-
                     b.Property<string>("Text");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MovieId");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("Comments");
                 });
@@ -58,8 +56,6 @@ namespace Lab2B.Migrations
 
                     b.Property<int>("Genre");
 
-                    b.Property<int?>("OwnerId");
-
                     b.Property<int>("Rating");
 
                     b.Property<string>("Title");
@@ -69,8 +65,6 @@ namespace Lab2B.Migrations
                     b.Property<int>("Year");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("Movies");
                 });
@@ -89,8 +83,6 @@ namespace Lab2B.Migrations
 
                     b.Property<string>("Password");
 
-                    b.Property<int>("UserRole");
-
                     b.Property<string>("Username");
 
                     b.HasKey("Id");
@@ -104,21 +96,9 @@ namespace Lab2B.Migrations
 
             modelBuilder.Entity("Lab2B.Models.Comment", b =>
                 {
-                    b.HasOne("Lab2B.Models.Movie", "Movie")
+                    b.HasOne("Lab2B.Models.Movie")
                         .WithMany("Comments")
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Lab2B.Models.User", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
-                });
-
-            modelBuilder.Entity("Lab2B.Models.Movie", b =>
-                {
-                    b.HasOne("Lab2B.Models.User", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
+                        .HasForeignKey("MovieId");
                 });
 #pragma warning restore 612, 618
         }

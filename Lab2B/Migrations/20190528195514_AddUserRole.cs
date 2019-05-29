@@ -1,0 +1,107 @@
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+
+namespace Lab2B.Migrations
+{
+    public partial class AddUserRole : Migration
+    {
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Comments_Movies_MovieId",
+                table: "Comments");
+
+            migrationBuilder.AddColumn<int>(
+                name: "UserRole",
+                table: "Users",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.AddColumn<int>(
+                name: "OwnerId",
+                table: "Movies",
+                nullable: true);
+
+            migrationBuilder.AddColumn<int>(
+                name: "OwnerId",
+                table: "Comments",
+                nullable: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Movies_OwnerId",
+                table: "Movies",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_OwnerId",
+                table: "Comments",
+                column: "OwnerId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Comments_Movies_MovieId",
+                table: "Comments",
+                column: "MovieId",
+                principalTable: "Movies",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Comments_Users_OwnerId",
+                table: "Comments",
+                column: "OwnerId",
+                principalTable: "Users",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Movies_Users_OwnerId",
+                table: "Movies",
+                column: "OwnerId",
+                principalTable: "Users",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Comments_Movies_MovieId",
+                table: "Comments");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Comments_Users_OwnerId",
+                table: "Comments");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Movies_Users_OwnerId",
+                table: "Movies");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Movies_OwnerId",
+                table: "Movies");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Comments_OwnerId",
+                table: "Comments");
+
+            migrationBuilder.DropColumn(
+                name: "UserRole",
+                table: "Users");
+
+            migrationBuilder.DropColumn(
+                name: "OwnerId",
+                table: "Movies");
+
+            migrationBuilder.DropColumn(
+                name: "OwnerId",
+                table: "Comments");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Comments_Movies_MovieId",
+                table: "Comments",
+                column: "MovieId",
+                principalTable: "Movies",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+        }
+    }
+}

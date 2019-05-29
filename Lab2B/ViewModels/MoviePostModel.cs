@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Lab2B.ViewModel
+namespace Lab2B.ViewModels
 {
     public class MoviePostModel
     {

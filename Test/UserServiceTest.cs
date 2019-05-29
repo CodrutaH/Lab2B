@@ -8,7 +8,6 @@ using System.Linq;
 namespace Tests
 {
    
-
         public class UsersServiceTests
         {
             private IOptions<AppSettings> config;
@@ -18,7 +17,7 @@ namespace Tests
         {
             config = Options.Create(new AppSettings
             {
-                Secret = "dsadggggggggghhhhhhh"
+                Secret = "dsadggggggggghgh"
             });
         }
 
